@@ -1,0 +1,856 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Математический марафон: Жемчужины Знаний</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background: linear-gradient(135deg, #1a2980, #26d0ce);
+            color: #333;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            position: relative;
+            overflow-x: hidden;
+        }
+
+        /* Анимированные пузырьки фона */
+        .bubble {
+            position: absolute;
+            background: rgba(205, 255, 255, 0.1);
+            border-radius: 50%;
+            animation: float 10s infinite linear;
+        }
+
+        .bubble:nth-child(1) {
+            width: 80px;
+            height: 80px;
+            top: 10%;
+            left: 10%;
+            animation-delay: 0s;
+        }
+
+        .bubble:nth-child(2) {
+            width: 50px;
+            height: 50px;
+            top: 60%;
+            left: 80%;
+            animation-delay: 5s;
+        }
+
+        .bubble:nth-child(3) {
+            width: 100px;
+            height: 100px;
+            top: 80%;
+            left: 20%;
+            animation-delay: 10s;
+        }
+
+        .bubble:nth-child(4) {
+            width: 60px;
+            height: 60px;
+            top: 90%;
+            left: 70%;
+            animation-delay: 15s;
+        }
+        @keyframes float {
+            0% { transform: translateY(0) rotate(0deg); }
+            100% { transform: translateY(-1000px) rotate(720deg); }
+        }
+
+        .container {
+            background-color: rgba(255, 255, 255, 0.95);
+            width: 100%;
+            max-width: 450px;
+            border-radius: 25px;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.3);
+            overflow: hidden;
+            text-align: center;
+            position: relative;
+            z-index: 10;
+            border: 3px solid #191970;
+        }
+
+        /* Панель с балансом жемчужин */
+        .pearl-panel {
+            background: linear-gradient(135deg, #4facfe, #00f2fe);
+            color: white;
+            padding: 15px;
+            border-radius: 0 0 20px 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .pearl-icon {
+            font-size: 1.5em;
+            animation: sparkle 2s infinite;
+        }
+
+        @keyframes sparkle {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.2); }
+        }
+
+        .screen {
+            padding: 30px 20px;
+            display: none;
+        }
+
+        .active {
+            display: block;
+            animation: fadeIn 0.5s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        h1, h2 {
+            color: #1a2980;
+            margin-bottom: 15px;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1);
+        }
+
+        h1 {
+            background: linear-gradient(135deg, #1a2980, #26d0ce);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            font-size: 2.2em;
+        }
+
+        p {
+            margin-bottom: 20px;
+            line-height: 1.5;
+            color: #555;
+        }
+
+        .btn {
+            background: linear-gradient(to right, #667eea, #764ba2);
+            color: white;
+            border: none;
+            padding: 14px 30px;
+            border-radius: 50px;
+            font-size: 1.1em;
+            cursor: pointer;
+            margin: 10px 5px;
+            transition: all 0.3s ease;
+            box-shadow: 0 6px 20px 0 rgba(116, 75, 162, 0.3);
+            font-weight: bold;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px 0 rgba(116, 75, 162, 0.5);
+        }
+
+        .btn:active {
+            transform: translateY(-1px);
+        }
+
+        .btn::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            transition: 0.5s;
+        }
+
+        .btn:hover::after {
+            left: 100%;
+        }
+
+        .btn-secondary {
+            background: linear-gradient(to right, #f093fb, #f5576c);
+        }
+
+        .btn-pearl {
+            background: linear-gradient(to right, #ffd700, #ff9800);
+        }
+
+        #level-buttons {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .level-btn {
+            background: linear-gradient(to right, #4facfe, #00f2fe);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        .level-btn.locked {
+            background: linear-gradient(to right, #c3cfe2, #c3cfe2);
+            cursor: not-allowed;
+            opacity: 0.6;
+        }
+
+        .level-number {
+            background: white;
+            color: #4facfe;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+        }
+
+        .problem {
+            font-size: 2em;
+            font-weight: bold;
+            margin: 25px 0;
+            color: #1a2980;
+            background: linear-gradient(135deg, #f5f7fa, #c3cfe2);
+            padding: 20px;
+            border-radius: 15px;
+            border: 2px solid #4facfe;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .options {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin: 25px 0;
+        }
+
+        .option-btn {
+            background-color: white;
+            border: 2px solid #4facfe;
+            border-radius: 15px;
+            padding: 18px 10px;
+            font-size: 1.2em;
+            cursor: pointer;
+            transition: all 0.2s;
+            font-weight: bold;
+            color: #1a2980;
+        }
+
+        .option-btn:hover {
+            background-color: #e6f7ff;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(79, 172, 254, 0.3);
+        }
+
+        .option-btn.correct {
+            background: linear-gradient(to right, #48bb78, #38a169);
+            border-color: #48bb78;
+            color: white;
+            animation: pulse 0.5s;
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+
+        .option-btn.incorrect {
+            background: linear-gradient(to right, #f56565, #e53e3e);
+            border-color: #f56565;
+            color: white;
+        }
+
+        .timer {
+            font-size: 1.4em;
+            font-weight: bold;
+            color: #e53e3e;
+            margin: 10px 0;
+            padding: 10px;
+            background: #fff5f5;
+            border-radius: 10px;
+            border: 2px solid #fed7d7;
+        }
+
+        .progress-container {
+            margin: 20px 0;
+        }
+
+        .progress-bar {
+            height: 12px;
+            background-color: #e2e8f0;
+            border-radius: 6px;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .progress {
+            height: 100%;
+            background: linear-gradient(to right, #4facfe, #00f2fe);
+            width: 0%;
+            transition: width 0.3s ease;
+            position: relative;
+        }
+
+        .progress::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(90deg, 
+                rgba(255,255,255,0.1) 25%, 
+                rgba(255,255,255,0.3) 50%, 
+                rgba(255,255,255,0.1) 75%);
+            background-size: 200% 100%;
+            animation: shimmer 2s infinite;
+        }
+
+        @keyframes shimmer {
+            0% { background-position: -200% 0; }
+            100% { background-position: 200% 0; }
+        }
+
+        .feedback {
+            font-weight: bold;
+            min-height: 1.5em;
+            margin: 15px 0;
+            padding: 15px;
+            border-radius: 10px;
+            font-size: 1.2em;
+        }
+
+        .correct-feedback {
+            color: #48bb78;
+            background-color: #f0fff4;
+            border: 2px solid #c6f6d5;
+            animation: bounce 0.5s;
+        }
+
+        .incorrect-feedback {
+            color: #f56565;
+            background-color: #fff5f5;
+            border: 2px solid #fed7d7;
+        }
+
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+
+        .stats {
+            display: flex;
+            justify-content: space-around;
+            margin: 20px 0;
+            font-weight: bold;
+            background: linear-gradient(135deg, #f5f7fa, #c3cfe2);
+            padding: 15px;
+            border-radius: 15px;
+            border: 2px solid #4facfe;
+        }
+
+        .result-stats {
+            background: linear-gradient(135deg, #f5f7fa, #c3cfe2);
+            padding: 20px;
+            border-radius: 15px;
+            margin: 20px 0;
+            border: 2px solid #4facfe;
+        }
+
+        .result-stats p {
+            font-size: 1.2em;
+            margin: 10px 0;
+            color: #1a2980;
+        }
+
+        .pearl-reward {
+            font-size: 1.5em;
+            color: #ffd700;
+            animation: glow 1.5s infinite alternate;
+        }
+
+        @keyframes glow {
+            from { text-shadow: 0 0 5px #ffd700; }
+            to { text-shadow: 0 0 20px #ffd700, 0 0 30px #ff9800; }
+        }
+
+        /* Иконка трофея */
+        #trophy {
+            font-size: 4em;
+            margin: 20px 0;
+            animation: spin 3s linear infinite;
+        }
+
+        @keyframes spin {
+            0% { transform: rotateY(0deg); }
+            100% { transform: rotateY(360deg); }
+        }
+
+        /* Адаптивность */
+        @media (max-width: 480px) {
+            .container {
+                max-width: 95%;
+            }
+            
+            .problem {
+                font-size: 1.6em;
+                padding: 15px;
+            }
+            
+            .options {
+                grid-template-columns: 1fr;
+                gap: 10px;
+            }
+            
+            .option-btn {
+                padding: 15px 5px;
+            }
+            
+            h1 {
+                font-size: 1.8em;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Анимированные пузырьки фона -->
+    <div class="bubble"></div>
+    <div class="bubble"></div>
+    <div class="bubble"></div>
+    <div class="bubble"></div>
+
+    <div class="container">
+        <!-- Панель с балансом жемчужин -->
+        <div class="pearl-panel">
+            <h2 id="pearl-balance">Жемчужины Знаний: 0</h2>
+        </div>
+
+        <!-- Экран приветствия -->
+        <div id="welcome-screen" class="screen active">
+            <h1>Математический марафон</h1>
+            <p>Добро пожаловать в подводное царство знаний!</p>
+            <p>Решай математические примеры, собирай <span style="color: #ffd700; font-weight: bold;">Жемчужины Знаний</span> и стань самым мудрым обитателем океана математики!</p>
+            <p>Каждый правильный ответ = 1 жемчужина знаний. Накопленные жемчужины ты можешь обменять на уникальные подарки в подводном магазине!</p>
+            <button id="start-btn" class="btn">начать погружение</button>
+        </div>
+
+        <!-- Экран выбора уровня -->
+        <div id="level-screen" class="screen">
+            <h2>Выберите глубину погружения</h2>
+            <p>Погружайся глубже - находи больше жемчужин знаний!</p>
+            <div id="level-buttons">
+                <!-- Кнопки уровней будут сгенерированы скриптом -->
+            </div>
+            <button id="back-to-welcome" class="btn btn-secondary">Назад</button>
+        </div>
+
+        <!-- Экран с задачей -->
+        <div id="game-screen" class="screen">
+            <h2 id="level-title">Уровень 1</h2>
+            <div class="stats">
+                <span id="problem-count">Пример: 1/20</span>
+                <span class="timer" id="timer">01:00</span>
+            </div>
+            <div class="progress-container">
+                <div class="progress-bar">
+                    <div class="progress" id="progress"></div>
+                </div>
+            </div>
+            <div class="problem" id="problem">35 + 17 = ?</div>
+            <div class="options" id="options">
+                <!-- Варианты ответов будут сгенерированы скриптом -->
+            </div>
+            <div class="feedback" id="feedback"></div>
+            <button id="next-btn" class="btn" style="display: none;">🌊 Следующий пример</button>
+        </div>
+
+        <!-- Экран результатов уровня -->
+        <div id="result-screen" class="screen">
+            <h2 id="result-title">Уровень завершен!</h2>
+            <div class="result-stats">
+                <p>Правильных ответов: <span id="correct-answers">20</span>/20</p>
+                <p class="pearl-reward">Получено жемчужин знаний: <span id="pearls-earned">20</span></p>
+                <p>💰 Общий баланс: <span id="total-pearls">0</span> жемчужин</p>
+            </div>
+            <p id="result-message">Поздравляем! Вы успешно решили все примеры и открыли следующий уровень!</p>
+            <button id="next-level-btn" class="btn">➡️ Следующий уровень</button>
+            <button id="back-to-levels" class="btn btn-secondary">Выбор уровня</button>
+        </div>
+
+        <!-- Экран финальных результатов -->
+        <div id="final-screen" class="screen">
+            <h1>🏆 Поздравляем!</h1>
+            <p>Вы стали Властелином Океана Математики и прошли все три глубины!</p>
+            <div id="trophy">👑</div>
+            <div class="result-stats">
+                <p class="pearl-reward">Ваше сокровище: <span id="final-pearls">0</span> жемчужин</p>
+                <p>Вы самый мудрый обитатель математического океана!</p>
+            </div>
+            <button id="restart-btn" class="btn">🔄 Начать заново</button>
+            <button id="shop-btn" class="btn btn-pearl">Магазин жемчужин</button>
+        </div>
+    </div>
+
+<script>
+        // Данные для игры: примеры и ответы для каждого уровня
+        const gameData = {
+            level1: [
+                { problem: "15 + 27", answer: 42, options: [38, 42, 45, 40] },
+                { problem: "64 - 29", answer: 35, options: [33, 35, 45, 39] },
+                { problem: "8 * 6", answer: 48, options: [42, 48, 56, 54] },
+                { problem: "81 / 9", answer: 9, options: [8, 7, 9, 10] },
+                { problem: "23 + 45", answer: 68, options: [68, 58, 78, 67] },
+                { problem: "72 - 38", answer: 34, options: [44, 34, 36, 32] },
+                { problem: "7 * 9", answer: 63, options: [56, 63, 72, 54] },
+                { problem: "56 / 7", answer: 8, options: [7, 8, 9, 6] },
+                { problem: "39 + 56", answer: 95, options: [85, 95, 105, 99] },
+                { problem: "90 - 47", answer: 43, options: [43, 53, 47, 33] },
+                { problem: "6 * 8", answer: 48, options: [42, 48, 56, 54] },
+                { problem: "45 / 5", answer: 9, options: [8, 9, 5, 7] },
+                { problem: "28 + 37", answer: 65, options: [55, 65, 75, 68] },
+                { problem: "84 - 29", answer: 55, options: [55, 65, 53, 63] },
+                { problem: "9 * 7", answer: 63, options: [56, 63, 72, 54] },
+                { problem: "72 / 8", answer: 9, options: [8, 9, 7, 10] },
+                { problem: "52 + 19", answer: 71, options: [61, 71, 81, 69] },
+                { problem: "67 - 28", answer: 39, options: [39, 49, 37, 47] },
+                { problem: "5 * 12", answer: 60, options: [50, 60, 55, 65] },
+                { problem: "63 / 9", answer: 7, options: [6, 7, 8, 9] }
+            ],
+            level2: [
+                { problem: "125 + 238", answer: 363, options: [353, 363, 373, 343] },
+                { problem: "407 - 189", answer: 218, options: [218, 228, 208, 198] },
+                { problem: "14 * 8", answer: 112, options: [102, 112, 122, 92] },
+                { problem: "96 / 12", answer: 8, options: [7, 8, 9, 10] },
+                { problem: "256 + 189", answer: 445, options: [435, 445, 455, 465] },
+                { problem: "521 - 267", answer: 254, options: [244, 254, 264, 274] },
+                { problem: "15 * 12", answer: 180, options: [170, 180, 190, 160] },
+                { problem: "144 / 12", answer: 12, options: [11, 12, 13, 14] },
+                { problem: "333 + 444", answer: 777, options: [767, 777, 787, 797] },
+                { problem: "600 - 325", answer: 275, options: [265, 275, 285, 295] },
+                { problem: "25 * 6", answer: 150, options: [140, 150, 160, 130] },
+                { problem: "169 / 13", answer: 13, options: [12, 13, 14, 15] },
+                { problem: "478 + 395", answer: 873, options: [863, 873, 883, 893] },
+                { problem: "752 - 468", answer: 284, options: [274, 284, 294, 304] },
+                { problem: "18 * 11", answer: 198, options: [188, 198, 208, 178] },
+                { problem: "196 / 14", answer: 14, options: [13, 14, 15, 16] },
+                { problem: "567 + 289", answer: 856, options: [846, 856, 866, 876] },
+                { problem: "804 - 526", answer: 278, options: [268, 278, 288, 298] },
+                { problem: "17 * 13", answer: 221, options: [211, 221, 231, 241] },
+                { problem: "225 / 15", answer: 15, options: [14, 15, 16, 17] }
+            ],
+            level3: [
+                { problem: "(15 + 27) * 2", answer: 84, options: [74, 84, 94, 104] },
+                { problem: "64 - 29 + 15", answer: 50, options: [40, 50, 60, 45] },
+                { problem: "8 * (6 + 3)", answer: 72, options: [62, 72, 82, 92] },
+                { problem: "(81 - 18) / 7", answer: 9, options: [8, 9, 10, 7] },
+                { problem: "23 + 45 * 2", answer: 113, options: [103, 113, 123, 133] },
+                { problem: "(72 - 38) * 3", answer: 102, options: [92, 102, 112, 122] },
+                { problem: "7 * 9 + 15", answer: 78, options: [68, 78, 88, 98] },
+                { problem: "100 - 56 / 7", answer: 92, options: [82, 92, 102, 112] },
+                { problem: "(39 + 56) - 25", answer: 70, options: [60, 70, 80, 90] },
+                { problem: "90 - (47 - 15)", answer: 58, options: [48, 58, 68, 78] },
+                { problem: "6 * 8 + 12", answer: 60, options: [50, 60, 70, 80] },
+                { problem: "(45 + 15) / 6", answer: 10, options: [9, 10, 11, 12] },
+                { problem: "28 + 37 * 2", answer: 102, options: [92, 102, 112, 122] },
+                { problem: "(84 - 29) + 20", answer: 75, options: [65, 75, 85, 95] },
+                { problem: "9 * (7 + 3)", answer: 90, options: [80, 90, 100, 110] },
+                { problem: "120 / (8 + 2)", answer: 12, options: [10, 12, 14, 16] },
+                { problem: "52 + 19 * 3", answer: 109, options: [99, 109, 119, 129] },
+                { problem: "(67 - 28) * 2", answer: 78, options: [68, 78, 88, 98] },
+                { problem: "5 * 12 + 25", answer: 85, options: [75, 85, 95, 105] },
+                { problem: "(63 + 27) / 9", answer: 10, options: [9, 10, 11, 12] }
+            ]
+        };
+
+        // Элементы DOM
+        const screens = {
+            welcome: document.getElementById('welcome-screen'),
+            level: document.getElementById('level-screen'),
+            game: document.getElementById('game-screen'),
+            result: document.getElementById('result-screen'),
+            final: document.getElementById('final-screen')
+        };
+
+        const levelButtonsContainer = document.getElementById('level-buttons');
+        const levelTitle = document.getElementById('level-title');
+        const problemCount = document.getElementById('problem-count');
+        const timerDisplay = document.getElementById('timer');
+        const progressBar = document.getElementById('progress');
+        const problemDisplay = document.getElementById('problem');
+        const optionsContainer = document.getElementById('options');
+        const feedbackDisplay = document.getElementById('feedback');
+        const nextButton = document.getElementById('next-btn');
+        const resultTitle = document.getElementById('result-title');
+        const resultMessage = document.getElementById('result-message');
+        const correctAnswersDisplay = document.getElementById('correct-answers');
+        const pearlsEarnedDisplay = document.getElementById('pearls-earned');
+        const totalPearlsDisplay = document.getElementById('total-pearls');
+        const finalPearlsDisplay = document.getElementById('final-pearls');
+        const pearlBalanceDisplay = document.getElementById('pearl-balance');
+
+        // Переменные состояния игры
+        let currentLevel = 1;
+        let currentProblemIndex = 0;
+        let correctAnswers = 0;
+        let totalPearls = parseInt(localStorage.getItem('mathMarathonPearls')) || 0; // Загружаем жемчужины из localStorage
+        let timer;
+        let timeLeft = 60;
+        let levelsUnlocked = JSON.parse(localStorage.getItem('mathMarathonLevels')) || { level1: true, level2: false, level3: false };
+
+        // Функция для сохранения жемчужин
+        function savePearls() {
+            localStorage.setItem('mathMarathonPearls', totalPearls.toString());
+            updatePearlDisplay();
+        }
+
+        // Функция для обновления отображения жемчужин
+        function updatePearlDisplay() {
+            pearlBalanceDisplay.textContent = `Жемчужины: ${totalPearls}`;
+            totalPearlsDisplay.textContent = totalPearls;
+            finalPearlsDisplay.textContent = totalPearls;
+        }
+
+        // Инициализация при загрузке
+        updatePearlDisplay();
+
+        // Инициализация кнопок уровней
+        function initLevelButtons() {
+            levelButtonsContainer.innerHTML = '';
+            for (let i = 1; i <= 3; i++) {
+                const button = document.createElement('button');
+                button.className = `btn level-btn ${levelsUnlocked[`level${i}`] ? '' : 'locked'}`;
+                button.innerHTML = `
+                    <span class="level-number">${i}</span>
+                    <span>Уровень ${i} ${levelsUnlocked[`level${i}`] ? '🔓' : '🔒'}</span>
+                `;
+                button.dataset.level = i;
+                
+                if (levelsUnlocked[`level${i}`]) {
+                    button.addEventListener('click', () => startLevel(i));
+                } else {
+                    button.disabled = true;
+                }
+                
+                levelButtonsContainer.appendChild(button);
+            }
+        }
+
+        // Начало уровня
+        function startLevel(level) {
+            currentLevel = level;
+            currentProblemIndex = 0;
+            correctAnswers = 0;
+            showScreen('game');
+            loadProblem();
+            startTimer();
+        }
+
+        // Загрузка задачи
+        function loadProblem() {
+            const levelData = gameData[`level${currentLevel}`];
+            const problem = levelData[currentProblemIndex];
+            
+            levelTitle.textContent = `🐠 Уровень ${currentLevel}`;
+            problemCount.textContent = `Пример: ${currentProblemIndex + 1}/20`;
+            progressBar.style.width = `${(currentProblemIndex / 20) * 100}%`;
+            problemDisplay.textContent = problem.problem + " = ?";
+            
+            // Очистка и создание кнопок с вариантами ответов
+            optionsContainer.innerHTML = '';
+            problem.options.sort(() => Math.random() - 0.5).forEach(option => {
+                const button = document.createElement('button');
+                button.className = 'option-btn';
+                button.textContent = option;
+                button.addEventListener('click', () => checkAnswer(option, problem.answer));
+                optionsContainer.appendChild(button);
+            });
+            
+            feedbackDisplay.textContent = '';
+            feedbackDisplay.className = 'feedback';
+            nextButton.style.display = 'none';
+        }
+
+        // Проверка ответа
+        function checkAnswer(selectedAnswer, correctAnswer) {
+            clearInterval(timer);
+            const optionButtons = document.querySelectorAll('.option-btn');
+            
+            optionButtons.forEach(button => {
+                button.disabled = true;
+                if (parseInt(button.textContent) === correctAnswer) {
+                    button.classList.add('correct');
+                }
+                if (parseInt(button.textContent) === selectedAnswer && selectedAnswer !== correctAnswer) {
+                    button.classList.add('incorrect');
+                }
+            });
+            
+            if (selectedAnswer === correctAnswer) {
+                feedbackDisplay.textContent = "Правильно! 💎 +1 жемчужина!";
+                feedbackDisplay.className = 'feedback correct-feedback';
+                correctAnswers++;
+                totalPearls++; // Добавляем жемчужину
+                savePearls(); // Сохраняем в localStorage
+            } else {
+                feedbackDisplay.textContent = `Неправильно! Правильный ответ: ${correctAnswer}`;
+                feedbackDisplay.className = 'feedback incorrect-feedback';
+            }
+            
+            nextButton.style.display = 'block';
+        }
+
+        // Таймер
+        function startTimer() {
+            timeLeft = 60;
+            updateTimerDisplay();
+            clearInterval(timer);
+            timer = setInterval(() => {
+                timeLeft--;
+                updateTimerDisplay();
+                
+                if (timeLeft <= 0) {
+                    clearInterval(timer);
+                    handleTimeUp();
+                }
+            }, 1000);
+        }
+
+        function updateTimerDisplay() {
+            const minutes = Math.floor(timeLeft / 60);
+            const seconds = timeLeft % 60;
+            timerDisplay.textContent = `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+            
+            // Меняем цвет при малом времени
+            if (timeLeft <= 10) {
+                timerDisplay.style.color = '#e53e3e';
+                timerDisplay.style.animation = 'pulse 1s infinite';
+            } else {
+                timerDisplay.style.color = '#e53e3e';
+                timerDisplay.style.animation = 'none';
+            }
+        }
+
+        function handleTimeUp() {
+            const levelData = gameData[`level${currentLevel}`];
+            const problem = levelData[currentProblemIndex];
+            
+            const optionButtons = document.querySelectorAll('.option-btn');
+            optionButtons.forEach(button => {
+                button.disabled = true;
+                if (parseInt(button.textContent) === problem.answer) {
+                    button.classList.add('correct');
+                }
+            });
+            
+            feedbackDisplay.textContent = `Время вышло! Правильный ответ: ${problem.answer}`;
+            feedbackDisplay.className = 'feedback incorrect-feedback';
+            nextButton.style.display = 'block';
+        }
+
+        // Следующая задача или завершение уровня
+        nextButton.addEventListener('click', () => {
+            currentProblemIndex++;
+            
+            if (currentProblemIndex < 20) {
+                loadProblem();
+                startTimer();
+            } else {
+                finishLevel();
+            }
+        });
+
+        // Завершение уровня
+        function finishLevel() {
+            clearInterval(timer);
+            
+            // Обновляем отображение заработанных жемчужин
+            pearlsEarnedDisplay.textContent = correctAnswers;
+            
+            if (correctAnswers === 20) {
+                // Открываем следующий уровень
+                if (currentLevel < 3) {
+                    levelsUnlocked[`level${currentLevel + 1}`] = true;
+                    localStorage.setItem('mathMarathonLevels', JSON.stringify(levelsUnlocked));
+                    
+                    resultTitle.textContent = "Уровень пройден!";
+                    resultMessage.textContent = "Поздравляем! Вы успешно решили все примеры и открыли следующую глубину погружения!";
+                } else {
+                    resultTitle.textContent = "🏆 Все глубины пройдены!";
+                    resultMessage.textContent = "Вы стали Властелином Океана Математики!";
+                }
+            } else {
+                resultTitle.textContent = "Уровень не пройден";
+                resultMessage.textContent = `Вам нужно правильно решить все 20 примеров. У вас получилось: ${correctAnswers}/20. Продолжайте тренироваться!`;
+            }
+            
+            correctAnswersDisplay.textContent = correctAnswers;
+            showScreen('result');
+        }
+
+        // Переключение экранов
+        function showScreen(screenName) {
+            Object.values(screens).forEach(screen => screen.classList.remove('active'));
+            screens[screenName].classList.add('active');
+        }
+
+        // Обработчики кнопок навигации
+        document.getElementById('start-btn').addEventListener('click', () => {
+            initLevelButtons();
+            showScreen('level');
+        });
+
+        document.getElementById('back-to-welcome').addEventListener('click', () => {
+            showScreen('welcome');
+        });
+
+        document.getElementById('next-level-btn').addEventListener('click', () => {
+            if (currentLevel < 3 && correctAnswers === 20) {
+                initLevelButtons();
+                showScreen('level');
+            } else if (currentLevel === 3 && correctAnswers === 20) {
+                showScreen('final');
+            } else {
+                initLevelButtons();
+                showScreen('level');
+            }
+        });
+
+        document.getElementById('back-to-levels').addEventListener('click', () => {
+            initLevelButtons();
+            showScreen('level');
+        });
+
+        document.getElementById('restart-btn').addEventListener('click', () => {
+            // Сброс прогресса уровней, но сохранение жемчужин
+            levelsUnlocked = { level1: true, level2: false, level3: false };
+            localStorage.setItem('mathMarathonLevels', JSON.stringify(levelsUnlocked));
+            initLevelButtons();
+            showScreen('welcome');
+        });
+
+        document.getElementById('shop-btn').addEventListener('click', () => {
+            alert(`🏪 Подводный магазин жемчужин\n\n💰 Ваш баланс: ${totalPearls} жемчужин\n\nВ разработке... Скоро здесь можно будет обменять жемчужины на уникальные подарки и бонусы`);
+        });
+
+        // Инициализация при загрузке
+        initLevelButtons();
+    </script>
+</body>
+</html>
