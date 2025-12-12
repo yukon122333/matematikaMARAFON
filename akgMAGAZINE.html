@@ -1,0 +1,361 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Математический марафон: Жемчужины Знаний</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background: linear-gradient(135deg, #1a2980, #26d0ce);
+            color: #333;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            position: relative;
+            overflow-x: hidden;
+        }
+
+        /* Анимированные пузырьки фона */
+        .bubble {
+            position: absolute;
+            background: rgba(205, 255, 255, 0.1);
+            border-radius: 50%;
+            animation: float 10s infinite linear;
+        }
+
+        @keyframes float {
+            0% { transform: translateY(0) rotate(0deg); }
+            100% { transform: translateY(-100vh) rotate(360deg); }
+        }
+
+        .bubble:nth-child(1) {
+            width: 80px;
+            height: 80px;
+            top: 10%;
+            left: 10%;
+            animation-delay: 0s;
+        }
+
+        .bubble:nth-child(2) {
+            width: 50px;
+            height: 50px;
+            top: 60%;
+            left: 80%;
+            animation-delay: 5s;
+        }
+
+        .bubble:nth-child(3) {
+            width: 100px;
+            height: 100px;
+            top: 80%;
+            left: 20%;
+            animation-delay: 10s;
+        }
+
+        .bubble:nth-child(4) {
+            width: 60px;
+            height: 60px;
+            top: 90%;
+            left: 70%;
+            animation-delay: 15s;
+        }
+
+        /* Счетчик жемчужин */
+        .pearl-counter {
+            background-color: rgba(255, 255, 255, 0.95);
+            padding: 15px 30px;
+            border-radius: 50px;
+            margin-bottom: 30px;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+            border: 3px solid #191970;
+            z-index: 10;
+            text-align: center;
+            width: 100%;
+            max-width: 450px;
+        }
+
+        .counter-title {
+            color: #1a2980;
+            font-size: 18px;
+            margin-bottom: 5px;
+            font-weight: 600;
+        }
+
+        .counter-value {
+            font-size: 32px;
+            font-weight: 700;
+            color: #FFD700;
+            text-shadow: 2px 2px 0 #1a2980;
+            margin-bottom: 10px;
+        }
+
+        .counter-controls {
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+            margin-top: 10px;
+        }
+
+        .counter-btn {
+            background: linear-gradient(to bottom, #1a2980, #26d0ce);
+            color: white;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 20px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        .counter-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
+        }
+
+        .counter-btn:active {
+            transform: translateY(1px);
+        }
+
+        .counter-input {
+            padding: 8px;
+            border-radius: 10px;
+            border: 2px solid #1a2980;
+            text-align: center;
+            width: 100px;
+        }
+
+        /* Контейнеры с подарками */
+        .shop-container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 20px;
+            max-width: 1000px;
+            z-index: 10;
+        }
+
+        .container, .container1, .container2 {
+            background-color: rgba(255, 255, 255, 0.95);
+            width: 100%;
+            max-width: 300px;
+            border-radius: 25px;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.3);
+            overflow: hidden;
+            text-align: center;
+            border: 3px solid #191970;
+            padding: 20px;
+            transition: all 0.3s;
+        }
+
+        .container:hover,
+        .container1:hover,
+        .container2:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
+        }
+
+        h2 {
+            color: #1a2980;
+            margin: 15px 0;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1);
+            font-size: 24px;
+        }
+
+        .price {
+            color: #FF4500;
+            font-weight: 700;
+            font-size: 22px;
+            margin: 10px 0;
+        }
+
+        .buy-btn {
+            background: linear-gradient(to bottom, #FF8C00, #FF4500);
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 50px;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 18px;
+            margin-top: 10px;
+            transition: all 0.3s;
+            width: 100%;
+            box-shadow: 0 6px 12px rgba(255, 69, 0, 0.3);
+        }
+
+        .buy-btn:hover {
+            background: linear-gradient(to bottom, #FF4500, #FF8C00);
+            transform: translateY(-2px);
+            box-shadow: 0 8px 16px rgba(255, 69, 0, 0.4);
+        }
+
+        .buy-btn:disabled {
+            background: linear-gradient(to bottom, #CCCCCC, #999999);
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+
+        .message {
+            margin-top: 20px;
+            padding: 15px;
+            background-color: rgba(255, 255, 255, 0.9);
+            border-radius: 15px;
+            max-width: 450px;
+            text-align: center;
+            border: 2px solid #191970;
+            display: none;
+            z-index: 10;
+        }
+
+        .success {
+            color: #008000;
+            border-color: #008000;
+        }
+
+        .error {
+            color: #FF0000;
+            border-color: #FF0000;
+        }
+    </style>
+</head>
+<body>
+    <!-- Анимированные пузырьки фона -->
+    <div class="bubble"></div>
+    <div class="bubble"></div>
+    <div class="bubble"></div>
+    <div class="bubble"></div>
+
+    <!-- Счетчик жемчужин -->
+    <div class="pearl-counter">
+        <div class="counter-title">Мои Жемчужины Знаний</div>
+        <div class="counter-value" id="pearlCount">100</div>
+        
+        <div class="counter-controls">
+            <input type="number" id="setPearls" class="counter-input" placeholder="Введите число" min="0">
+            <button class="counter-btn" onclick="setPearlCount()">Установить</button>
+            <button class="counter-btn" onclick="addPearls(10)">+10</button>
+            <button class="counter-btn" onclick="addPearls(50)">+50</button>
+        </div>
+    </div>
+
+    <!-- Магазин подарков -->
+    <div class="shop-container">
+        <div class="container">
+            <img src="https://school.mos.ru/storage/gamification/rewards/images/small/labubu_green_160.png" width="160" height="160" alt="Reward card image">
+            <h2>Лабубу</h2>
+            <div class="price">20 жемчужин</div>
+            <button class="buy-btn" onclick="buyItem(20, 'Лабубу зеленый')">Купить</button>
+        </div>
+        
+        <div class="container1">
+            <img src="https://school.mos.ru/storage/gamification/rewards/images/small/kapibara_160.png" width="160" height="160" alt="Reward card image">
+            <h2>Капибара</h2>
+            <div class="price">40 жемчужин</div>
+            <button class="buy-btn" onclick="buyItem(40, 'Капибара')">Купить</button>
+        </div>
+        
+        <div class="container2">
+            <img src="https://school.mos.ru/storage/gamification/rewards/images/small/cat_anime_160.png" width="160" height="160" alt="Reward card image">
+            <h2>Котик</h2>
+            <div class="price">60 жемчужин</div>
+            <button class="buy-btn" onclick="buyItem(60, 'Котик аниме')">Купить</button>
+        </div>
+    </div>
+
+    <!-- Сообщения о покупке -->
+    <div id="message" class="message"></div>
+
+    <script>
+        // Начальное количество жемчужин
+        let pearlCount = 100;
+        const pearlCountElement = document.getElementById('pearlCount');
+        const messageElement = document.getElementById('message');
+        
+        // Функция для обновления отображения счетчика
+        function updatePearlDisplay() {
+            pearlCountElement.textContent = pearlCount;
+            updateBuyButtons();
+        }
+        
+        // Функция для добавления жемчужин
+        function addPearls(amount) {
+            pearlCount += amount;
+            updatePearlDisplay();
+            // Исправлено: убран лишний знак + в начале строки
+            showMessage(`${amount} жемчужин добавлено!`, 'success');
+        }
+        
+        // Функция для установки конкретного количества жемчужин
+        function setPearlCount() {
+            const input = document.getElementById('setPearls');
+            const value = parseInt(input.value);
+            
+            if (!isNaN(value) && value >= 0) {
+                pearlCount = value;
+                updatePearlDisplay();
+                // Исправлено: убран лишний знак + в начале строки
+                showMessage(`Количество жемчужин установлено: ${value}`, 'success');
+                input.value = '';
+            } else {
+                showMessage('Пожалуйста, введите корректное число (0 или больше)', 'error');
+            }
+        }
+        
+        // Функция для покупки предмета
+        function buyItem(price, itemName) {
+            if (pearlCount >= price) {
+                pearlCount -= price;
+                updatePearlDisplay();
+                showMessage(`Поздравляем! Вы купили "${itemName}" за ${price} жемчужин!`, 'success');
+            } else {
+                showMessage(`Недостаточно жемчужин! Нужно еще ${price - pearlCount} жемчужин для покупки "${itemName}"`, 'error');
+            }
+        }
+        
+        // Функция для обновления состояния кнопок покупки
+        function updateBuyButtons() {
+            const buttons = document.querySelectorAll('.buy-btn');
+            buttons.forEach(button => {
+                // Получаем цену из текста кнопки или из атрибута
+                const priceText = button.parentElement.querySelector('.price').textContent;
+                const price = parseInt(priceText);
+                
+                if (pearlCount >= price) {
+                    button.disabled = false;
+                } else {
+                    button.disabled = true;
+                }
+            });
+        }
+        
+        // Функция для показа сообщений
+        function showMessage(text, type) {
+            messageElement.textContent = text;
+            messageElement.className = 'message ' + type;
+            messageElement.style.display = 'block';
+            
+            // Автоматически скрыть сообщение через 3 секунды
+            setTimeout(() => {
+                messageElement.style.display = 'none';
+            }, 3000);
+        }
+        
+        // Инициализация при загрузке страницы
+        window.onload = function() {
+            updatePearlDisplay();
+        };
+    </script>
+</body>
+</html>
